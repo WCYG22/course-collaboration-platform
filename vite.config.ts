@@ -14,6 +14,20 @@ export default defineConfig(() => {
     server: {
       hmr: process.env.DISABLE_HMR !== 'true',
       watch: process.env.DISABLE_HMR === 'true' ? null : {},
+      proxy: {
+        // Proxy API requests to backend server during development
+        '/api': {
+          target: 'http://localhost:5000',
+          changeOrigin: true,
+          secure: false,
+        },
+        // Proxy WebSocket connections
+        '/socket.io': {
+          target: 'http://localhost:5000',
+          changeOrigin: true,
+          ws: true,
+        },
+      },
     },
     preview: {
       host: '0.0.0.0',
@@ -23,6 +37,19 @@ export default defineConfig(() => {
         'course-collaboration-platform.onrender.com',
         '.onrender.com', // Allow all Render subdomains
       ],
+      proxy: {
+        // Proxy API requests in preview mode
+        '/api': {
+          target: process.env.VITE_API_URL || 'http://localhost:5000',
+          changeOrigin: true,
+          secure: false,
+        },
+        '/socket.io': {
+          target: process.env.VITE_API_URL || 'http://localhost:5000',
+          changeOrigin: true,
+          ws: true,
+        },
+      },
     },
   };
 });

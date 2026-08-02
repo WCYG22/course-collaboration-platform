@@ -6,3 +6,34 @@ coverage/
 *.log
 .env*
 !.env.example
+
+# Database files
+*.db
+*.db-shm
+*.db-wal
+server/database/*.db
+server/database/*.db-shm
+server/database/*.db-wal
+
+# Uploads directory (keep structure, ignore content)
+uploads/*
+!uploads/.gitkeep
+uploads/materials/*
+!uploads/materials/.gitkeep
+uploads/submissions/*
+!uploads/submissions/.gitkeep
+uploads/avatars/*
+!uploads/avatars/.gitkeep
+
+# IDE
+.vscode/
+.idea/
+*.sublime-*
+
+# OS files
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.temp
+.cache/
