@@ -2,11 +2,9 @@
 <img width="1200" height="475" alt="GHBanner" src="https://ai.google.dev/static/site-assets/images/share-ais-513315318.png" />
 </div>
 
-# Course Collaboration Platform
+# CAML - Course Collaboration Platform
 
-An AI-powered course collaboration platform built with React, TypeScript, and Vite, featuring real-time discussions, scheduling, and milestone tracking.
-
-View your app in AI Studio: https://ai.studio/apps/92a3a2e4-144b-4dd8-bcc2-e80d543d107d
+An AI-powered course collaboration platform built with React, TypeScript, and Vite, featuring real-time discussions, scheduling, and milestone tracking powered by CAML.
 
 ## Run Locally
 
