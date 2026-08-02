@@ -1,0 +1,55 @@
+@import "tailwindcss";
+
+@layer base {
+  html {
+    font-size: 18px;
+  }
+  body {
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #0f172a;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+/* Global Typography Scaling Overrides for enhanced readability */
+.text-\[9px\], .text-\[10px\], .text-\[11px\] {
+  font-size: 0.78rem !important;
+  line-height: 1.35 !important;
+}
+
+.text-xs {
+  font-size: 0.875rem !important;
+  line-height: 1.4 !important;
+}
+
+.text-sm {
+  font-size: 1rem !important;
+  line-height: 1.5 !important;
+}
+
+.text-base {
+  font-size: 1.125rem !important;
+  line-height: 1.6 !important;
+}
+
+.text-lg {
+  font-size: 1.3rem !important;
+  line-height: 1.6 !important;
+}
+
+.text-xl {
+  font-size: 1.55rem !important;
+  line-height: 1.5 !important;
+}
+
+.text-2xl {
+  font-size: 1.9rem !important;
+  line-height: 1.4 !important;
+}
+
+.text-3xl {
+  font-size: 2.3rem !important;
+  line-height: 1.3 !important;
+}

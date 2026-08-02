@@ -1,0 +1,6 @@
+{
+  "name": "CAML LMS",
+  "description": "CAML Learning Management System - A comprehensive course collaboration platform with material sharing, assignment submissions, collaboration profiles, and instructor analytics.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
