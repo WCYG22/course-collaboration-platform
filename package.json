@@ -7,10 +7,10 @@
     "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
     "dev:server": "tsx watch server/index.ts",
     "dev:client": "vite --port=3000 --host=0.0.0.0",
-    "build": "npm run build:client && npm run build:server",
+    "build": "vite build",
     "build:client": "vite build",
     "build:server": "tsc -p tsconfig.server.json && tsc-alias -p tsconfig.server.json",
-    "start": "node dist/server/index.js",
+    "start": "node --loader tsx server/index.ts",
     "preview": "vite preview --port=$PORT --host=0.0.0.0",
     "clean": "rm -rf dist server.js",
     "lint": "tsc --noEmit",
@@ -37,6 +37,7 @@
     "react-dom": "^19.0.1",
     "recharts": "^3.9.2",
     "socket.io": "^4.7.5",
+    "tsx": "^4.21.0",
     "uuid": "^9.0.1",
     "vite": "^6.2.3",
     "winston": "^3.13.0"
@@ -57,8 +58,6 @@
     "esbuild": "^0.25.0",
     "tailwindcss": "^4.1.14",
     "tsc-alias": "^1.8.8",
-    "tsx": "^4.21.0",
-    "typescript": "~5.8.2",
-    "vite": "^6.2.3"
+    "typescript": "~5.8.2"
   }
 }

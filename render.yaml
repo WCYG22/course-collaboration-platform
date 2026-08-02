@@ -3,9 +3,18 @@ services:
     name: course-collaboration-platform
     env: node
     buildCommand: npm install && npm run build
-    startCommand: npm run preview
+    startCommand: npm start
     envVars:
       - key: NODE_VERSION
         value: 18
+      - key: DB_TYPE
+        value: postgres
+      - key: JWT_SECRET
+        sync: false
       - key: GEMINI_API_KEY
         sync: false
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 5000
+

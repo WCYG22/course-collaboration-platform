@@ -14,6 +14,9 @@ const __dirname = path.dirname(__filename);
 // Database configuration from environment variables
 const DB_TYPE = process.env.DB_TYPE || 'sqlite'; // 'postgres' or 'sqlite'
 
+// Define database type
+export type DatabaseConnection = Pool | Database.Database | null;
+
 // PostgreSQL configuration
 let pgPool: Pool | null = null;
 
@@ -45,8 +48,8 @@ if (DB_TYPE === 'sqlite') {
   sqliteDb.pragma('foreign_keys = ON');
 }
 
-export const db = DB_TYPE === 'postgres' ? pgPool : sqliteDb;
-export const dbType = DB_TYPE;
+export const db: DatabaseConnection = DB_TYPE === 'postgres' ? pgPool : sqliteDb;
+export const dbType: string = DB_TYPE;
 
 export async function initializeDatabase() {
   if (DB_TYPE === 'postgres' && pgPool) {
