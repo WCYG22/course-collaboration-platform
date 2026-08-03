@@ -3361,14 +3361,7 @@ curl -X POST https://caml-lms.onrender.com/api/auth/register \
 | Optimization | Implementation | Impact |
 |--------------|----------------|--------|
 | **Gzip Compression** | `compression` middleware | 70% bandwidth reduction |
-| **Static Asset Caching** | Browser caching headers | Faster repeat visits |
-| **Database Indexes** | Strategic index placement | 5x faster queries |
-| **Connection Pooling** | PostgreSQL default config | Reduced connection overhead |
-| **Rate Limiting** | 100 req/15min per IP | Prevents API abuse |
-
-**Backup & Disaster Recovery:**
-
-1. **Database Backups:**
+|base Backups:**
    - Automatic daily backups (Render managed)
    - Point-in-time recovery (PITR) available on paid plans
    - Manual backup procedure:
@@ -3495,7 +3488,14 @@ refactor: improve database abstraction layer
 |-------------|--------|-----|---------------|
 | **Production** | ✅ Live | https://caml-lms.onrender.com | August 2, 2026 |
 | **Development** | ✅ Local | http://localhost:5000 | N/A |
+ **Static Asset Caching** | Browser caching headers | Faster repeat visits |
+| **Database Indexes** | Strategic index placement | 5x faster queries |
+| **Connection Pooling** | PostgreSQL default config | Reduced connection overhead |
+| **Rate Limiting** | 100 req/15min per IP | Prevents API abuse |
 
+**Backup & Disaster Recovery:**
+
+1. **Data
 ---
 
 ## 5.0 Conclusion
@@ -3529,28 +3529,47 @@ The CAML LMS project represents a strong foundation for deployment in real educa
 
 ## References
 
-**Technologies & Frameworks:**
-- React.js Documentation. (2026). *React – A JavaScript library for building user interfaces*. https://react.dev/
-- Express.js Documentation. (2026). *Express - Fast, unopinionated, minimalist web framework for Node.js*. https://expressjs.com/
-- PostgreSQL Documentation. (2026). *PostgreSQL: The World's Most Advanced Open Source Database*. https://www.postgresql.org/docs/
-- Socket.IO Documentation. (2026). *Socket.IO - Bidirectional and low-latency communication for every platform*. https://socket.io/docs/
+Atlassian. (2026). *What is scrum?* Atlassian Agile Coach. https://www.atlassian.com/agile/scrum
 
-**Security & Authentication:**
-- JSON Web Tokens. (2026). *JWT.IO - JSON Web Tokens Introduction*. https://jwt.io/introduction
-- OWASP. (2026). *OWASP Top Ten Web Application Security Risks*. https://owasp.org/www-project-top-ten/
+Bcrypt. (2023). *Bcrypt - A library to help you hash passwords*. npm. https://www.npmjs.com/package/bcrypt
 
-**Agile Methodology:**
-- Schwaber, K., & Sutherland, J. (2020). *The Scrum Guide*. Scrum.org. https://scrumguides.org/
-- Atlassian. (2026). *What is Scrum?* https://www.atlassian.com/agile/scrum
+Express.js. (2026). *Express - Fast, unopinionated, minimalist web framework for Node.js*. https://expressjs.com/
 
-**Deployment & DevOps:**
-- Render Documentation. (2026). *Render Docs - Cloud Application Hosting for Developers*. https://render.com/docs
-- GitHub. (2026). *GitHub Docs - Get started with GitHub*. https://docs.github.com/
+Framer Motion. (2026). *Framer Motion - A production-ready motion library for React*. https://www.framer.com/motion/
 
-**Course Materials:**
-- XBAU2114N Software Development Methods Lecture Notes (Week 1-14)
-- Assignment 1 Project Report (May 2026)
-- Assignment 2 Rubric and Guidelines (June 2026)
+GitHub. (2026). *GitHub Docs - Get started with GitHub*. https://docs.github.com/
+
+Helmet. (2026). *Helmet.js - Help secure Express apps with various HTTP headers*. https://helmetjs.github.io/
+
+JSON Web Tokens. (2026). *JWT.IO - JSON Web Tokens introduction*. https://jwt.io/introduction
+
+Multer. (2023). *Multer - Middleware for handling multipart/form-data*. npm. https://www.npmjs.com/package/multer
+
+Node.js Foundation. (2026). *Node.js documentation*. https://nodejs.org/en/docs/
+
+OWASP Foundation. (2026). *OWASP Top Ten web application security risks*. https://owasp.org/www-project-top-ten/
+
+PostgreSQL Global Development Group. (2026). *PostgreSQL 15 documentation*. https://www.postgresql.org/docs/15/
+
+React. (2026). *React - A JavaScript library for building user interfaces*. https://react.dev/
+
+Render. (2026). *Render documentation - Cloud application hosting for developers*. https://render.com/docs
+
+Schwaber, K., & Sutherland, J. (2020). *The scrum guide: The definitive guide to scrum: The rules of the game*. Scrum.org. https://scrumguides.org/
+
+Socket.IO. (2026). *Socket.IO documentation - Bidirectional and low-latency communication for every platform*. https://socket.io/docs/
+
+Tailwind Labs. (2026). *Tailwind CSS documentation*. https://tailwindcss.com/docs
+
+TypeScript. (2026). *TypeScript documentation - JavaScript with syntax for types*. https://www.typescriptlang.org/docs/
+
+Vite. (2026). *Vite - Next generation frontend tooling*. https://vitejs.dev/
+
+XBAU2114N Software Development Methods. (2026). *Assignment 1 project report*. [Unpublished manuscript].
+
+XBAU2114N Software Development Methods. (2026). *Assignment 2 rubric and guidelines*. [Course materials].
+
+XBAU2114N Software Development Methods. (2026). *Lecture notes* (Weeks 1-14). [Course materials].
 
 ---
 
