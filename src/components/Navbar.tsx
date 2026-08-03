@@ -45,15 +45,15 @@ export default function Navbar({
         <div className="px-5 md:px-8">
           <div className="flex items-center justify-between h-18 sm:h-20">
             {/* Logo & Brand */}
-            <div className="flex items-center space-x-3">
-              <div className="flex items-center justify-center bg-slate-950 p-2.5 rounded-xl text-white shadow-xs">
-                <BookOpen className="h-6 w-6" />
+            <div className="flex items-center space-x-2 sm:space-x-3">
+              <div className="flex items-center justify-center bg-slate-950 p-2 sm:p-2.5 rounded-xl text-white shadow-xs flex-shrink-0">
+                <BookOpen className="h-5 w-5 sm:h-6 sm:w-6" />
               </div>
-              <div>
-                <span className="font-black text-2xl md:text-3xl tracking-tight block text-slate-900 leading-none">
+              <div className="min-w-0">
+                <span className="font-black text-lg sm:text-2xl md:text-3xl tracking-tight block text-slate-900 leading-none">
                   CAML
                 </span>
-                <span className="text-xs sm:text-sm text-slate-600 font-extrabold uppercase tracking-widest font-mono mt-1 block">
+                <span className="text-[10px] sm:text-xs md:text-sm text-slate-600 font-extrabold uppercase tracking-widest font-mono mt-0.5 sm:mt-1 block">
                   Learning Management System
                 </span>
               </div>
