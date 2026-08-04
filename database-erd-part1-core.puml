@@ -1,0 +1,77 @@
+@startuml ERD_Part1_Core_Entities
+
+skinparam dpi 200
+skinparam defaultFontSize 11
+skinparam monochrome true
+skinparam shadowing false
+hide circle
+
+title CAML LMS Database - Part 1: Core Entities
+
+class users {
+  + id : UUID <<PK>>
+  --
+  email : VARCHAR(255) <<unique>>
+  password_hash : VARCHAR(255)
+  name : VARCHAR(255)
+  role : ENUM('student', 'instructor')
+  avatar : VARCHAR(500)
+  bio : TEXT
+  skills : JSON
+  preferred_mode : ENUM
+  availability : JSON
+}
+
+class courses {
+  + id : UUID <<PK>>
+  --
+  instructor_id : UUID <<FK>>
+  code : VARCHAR(20)
+  name : VARCHAR(255)
+  description : TEXT
+  status : ENUM('draft', 'published', 'archived')
+}
+
+class enrollments {
+  + id : UUID <<PK>>
+  --
+  course_id : UUID <<FK>>
+  student_id : UUID <<FK>>
+  enrolled_at : TIMESTAMP
+  progress : INTEGER
+  --
+  UNIQUE(course_id, student_id)
+}
+
+class sessions {
+  + id : UUID <<PK>>
+  --
+  user_id : UUID <<FK>>
+  token : VARCHAR(500) <<unique>>
+  expires_at : TIMESTAMP
+}
+
+class notifications {
+  + id : UUID <<PK>>
+  --
+  user_id : UUID <<FK>>
+  type : VARCHAR(50)
+  title : VARCHAR(255)
+  message : TEXT
+  is_read : BOOLEAN
+}
+
+' Relationships
+users "1" *-- "0..*" sessions : has
+users "1" *-- "0..*" notifications : receives
+users "1" -- "0..*" courses : instructs >
+users "1" -- "0..*" enrollments : enrolls in >
+courses "1" -- "0..*" enrollments : has students >
+
+note bottom of enrollments
+  Junction table for
+  Many-to-Many relationship
+  between users and courses
+end note
+
+@enduml

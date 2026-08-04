@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CAML LMS - Clear Browser Data</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 600px;
+            width: 100%;
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+        
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+        
+        .status {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+        
+        .status.info {
+            background: #e3f2fd;
+            color: #1976d2;
+            border-left: 4px solid #1976d2;
+        }
+        
+        .status.success {
+            background: #e8f5e9;
+            color: #388e3c;
+            border-left: 4px solid #388e3c;
+        }
+        
+        .status.warning {
+            background: #fff3e0;
+            color: #f57c00;
+            border-left: 4px solid #f57c00;
+        }
+        
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            margin-bottom: 10px;
+            transition: all 0.3s;
+        }
+        
+        button:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        button:active {
+            transform: translateY(0);
+        }
+        
+        button.danger {
+            background: #e53e3e;
+        }
+        
+        button.danger:hover {
+            background: #c53030;
+        }
+        
+        .data-list {
+            background: #f7fafc;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .data-item {
+            padding: 8px;
+            margin: 5px 0;
+            background: white;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 12px;
+            color: #2d3748;
+            border-left: 3px solid #667eea;
+        }
+        
+        .empty {
+            text-align: center;
+            color: #a0aec0;
+            font-style: italic;
+            padding: 20px;
+        }
+        
+        .instructions {
+            background: #f7fafc;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+        
+        .instructions h3 {
+            color: #2d3748;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+        
+        .instructions ol {
+            margin-left: 20px;
+            color: #4a5568;
+            line-height: 1.8;
+        }
+        
+        .instructions li {
+            margin-bottom: 10px;
+        }
+        
+        .key-count {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧹 Clear Browser Data</h1>
+        <p class="subtitle">CAML LMS Demo Reset Tool</p>
+        
+        <div id="status" class="status info">
+            Ready to clear browser data for fresh demo
+        </div>
+        
+        <h3>Found LocalStorage Keys <span id="keyCount" class="key-count">0</span></h3>
+        <div id="dataList" class="data-list">
+            <div class="empty">Loading...</div>
+        </div>
+        
+        <button onclick="clearAllData()" class="danger">
+            🗑️ Clear All CAML LMS Data
+        </button>
+        
+        <button onclick="showData()">
+            🔄 Refresh Key List
+        </button>
+        
+        <button onclick="clearAndReload()">
+            🚀 Clear & Reload Application
+        </button>
+        
+        <div class="instructions">
+            <h3>📋 After Clearing:</h3>
+            <ol>
+                <li>Click "Clear All CAML LMS Data" button above</li>
+                <li>Confirm the action</li>
+                <li>Wait for success message</li>
+                <li>Click "Clear & Reload Application" or manually navigate to your app</li>
+                <li>You should see a completely clean system ready for demo!</li>
+            </ol>
+        </div>
+    </div>
+    
+    <script>
+        // Show current localStorage data
+        function showData() {
+            const dataList = document.getElementById('dataList');
+            const keyCount = document.getElementById('keyCount');
+            const ccpKeys = [];
+            
+            // Find all keys starting with 'ccp_'
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (key && key.startsWith('ccp_')) {
+                    ccpKeys.push(key);
+                }
+            }
+            
+            keyCount.textContent = ccpKeys.length;
+            
+            if (ccpKeys.length === 0) {
+                dataList.innerHTML = '<div class="empty">✅ No CAML LMS data found - Already clean!</div>';
+            } else {
+                dataList.innerHTML = ccpKeys.map(key => {
+                    const value = localStorage.getItem(key);
+                    const preview = value && value.length > 50 ? value.substring(0, 50) + '...' : value;
+                    return `<div class="data-item"><strong>${key}</strong></div>`;
+                }).join('');
+            }
+        }
+        
+        // Clear all CAML LMS localStorage data
+        function clearAllData() {
+            if (!confirm('⚠️ This will DELETE all CAML LMS data from your browser.\n\nAre you sure you want to continue?')) {
+                return;
+            }
+            
+            const status = document.getElementById('status');
+            const keysToRemove = [];
+            
+            // Collect all ccp_ keys
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (key && key.startsWith('ccp_')) {
+                    keysToRemove.push(key);
+                }
+            }
+            
+            // Remove all keys
+            let removedCount = 0;
+            keysToRemove.forEach(key => {
+                try {
+                    localStorage.removeItem(key);
+                    removedCount++;
+                } catch (e) {
+                    console.error('Failed to remove key:', key, e);
+                }
+            });
+            
+            // Also clear sessionStorage
+            sessionStorage.clear();
+            
+            // Update status
+            status.className = 'status success';
+            status.textContent = `✅ Successfully cleared ${removedCount} items from browser storage!`;
+            
+            // Refresh the display
+            setTimeout(showData, 500);
+        }
+        
+        // Clear and reload the application
+        function clearAndReload() {
+            clearAllData();
+            
+            setTimeout(() => {
+                alert('Browser data cleared!\n\nRedirecting to CAML LMS...');
+                // Redirect to your application URL
+                window.location.href = 'http://localhost:3000';
+                // For production: window.location.href = 'https://caml-lms.onrender.com';
+            }, 1000);
+        }
+        
+        // Show data on page load
+        window.addEventListener('load', showData);
+    </script>
+</body>
+</html>

@@ -1,0 +1,172 @@
+@startuml CAML_LMS_ERD_Simplified
+
+skinparam dpi 300
+skinparam defaultFontSize 14
+skinparam monochrome true
+skinparam shadowing false
+skinparam linetype ortho
+skinparam nodesep 120
+skinparam ranksep 100
+
+' Core User & Authentication
+package "User Management" {
+  entity users {
+    * id : UUID <<PK>>
+    --
+    * email : VARCHAR(255) <<U>>
+    * password_hash : VARCHAR
+    * name : VARCHAR(255)
+    * role : ENUM
+    avatar : VARCHAR(500)
+    bio : TEXT
+    skills : JSON
+    preferred_mode : ENUM
+    availability : JSON
+  }
+  
+  entity sessions {
+    * id : UUID <<PK>>
+    --
+    * user_id : UUID <<FK>>
+    * token : VARCHAR(500) <<U>>
+    expires_at : TIMESTAMP
+  }
+  
+  entity notifications {
+    * id : UUID <<PK>>
+    --
+    * user_id : UUID <<FK>>
+    type : VARCHAR(50)
+    title : VARCHAR(255)
+    message : TEXT
+    is_read : BOOLEAN
+  }
+}
+
+' Course Structure
+package "Course Management" {
+  entity courses {
+    * id : UUID <<PK>>
+    --
+    * instructor_id : UUID <<FK>>
+    * code : VARCHAR(20)
+    * name : VARCHAR(255)
+    description : TEXT
+    status : ENUM
+  }
+  
+  entity enrollments {
+    * id : UUID <<PK>>
+    --
+    * course_id : UUID <<FK>>
+    * student_id : UUID <<FK>>
+    enrolled_at : TIMESTAMP
+    progress : INTEGER
+    --
+    <<U>> (course_id, student_id)
+  }
+  
+  entity course_weeks {
+    * id : UUID <<PK>>
+    --
+    * course_id : UUID <<FK>>
+    week_number : INTEGER
+    title : VARCHAR(255)
+    start_date : DATE
+    end_date : DATE
+  }
+  
+  entity materials {
+    * id : UUID <<PK>>
+    --
+    * week_id : UUID <<FK>>
+    title : VARCHAR(255)
+    type : ENUM
+    file_url : VARCHAR(500)
+    file_size : INTEGER
+  }
+}
+
+' Assignments & Submissions
+package "Assignment System" {
+  entity assignments {
+    * id : UUID <<PK>>
+    --
+    * course_id : UUID <<FK>>
+    * title : VARCHAR(255)
+    description : TEXT
+    due_date : TIMESTAMP
+    total_marks : INTEGER
+    file_required : BOOLEAN
+  }
+  
+  entity submissions {
+    * id : UUID <<PK>>
+    --
+    * assignment_id : UUID <<FK>>
+    * student_id : UUID <<FK>>
+    file_url : VARCHAR(500)
+    submitted_at : TIMESTAMP
+    grade : DECIMAL(5,2)
+    feedback : TEXT
+    version : INTEGER
+    status : ENUM
+  }
+}
+
+' Discussion System
+package "Discussion Forum" {
+  entity discussion_posts {
+    * id : UUID <<PK>>
+    --
+    * course_id : UUID <<FK>>
+    * user_id : UUID <<FK>>
+    title : VARCHAR(255)
+    content : TEXT
+  }
+  
+  entity discussion_replies {
+    * id : UUID <<PK>>
+    --
+    * post_id : UUID <<FK>>
+    * user_id : UUID <<FK>>
+    content : TEXT
+  }
+}
+
+' Junction Tables
+package "Many-to-Many Relations" {
+  entity bookmarks {
+    * id : UUID <<PK>>
+    --
+    * user_id : UUID <<FK>>
+    * material_id : UUID <<FK>>
+    created_at : TIMESTAMP
+    --
+    <<U>> (user_id, material_id)
+  }
+}
+
+' Relationships
+users ||--o{ sessions
+users ||--o{ notifications
+users ||--o{ courses
+users ||--o{ enrollments
+users ||--o{ submissions
+users ||--o{ discussion_posts
+users ||--o{ discussion_replies
+users ||--o{ bookmarks
+
+courses ||--o{ enrollments
+courses ||--o{ course_weeks
+courses ||--o{ assignments
+courses ||--o{ discussion_posts
+
+course_weeks ||--o{ materials
+materials ||--o{ bookmarks
+
+assignments ||--o{ submissions
+
+discussion_posts ||--o{ discussion_replies
+
+@enduml

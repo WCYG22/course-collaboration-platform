@@ -1,0 +1,69 @@
+@startuml ERD_Part2_Course_Content
+
+skinparam dpi 200
+skinparam defaultFontSize 11
+skinparam monochrome true
+skinparam shadowing false
+hide circle
+
+title CAML LMS Database - Part 2: Course Content & Materials
+
+class courses {
+  + id : UUID <<PK>>
+  --
+  code : VARCHAR(20)
+  name : VARCHAR(255)
+  status : ENUM
+}
+
+class course_weeks {
+  + id : UUID <<PK>>
+  --
+  course_id : UUID <<FK>>
+  week_number : INTEGER
+  title : VARCHAR(255)
+  description : TEXT
+  start_date : DATE
+  end_date : DATE
+}
+
+class materials {
+  + id : UUID <<PK>>
+  --
+  week_id : UUID <<FK>>
+  title : VARCHAR(255)
+  type : ENUM('lecture', 'reading', 'video', 'other')
+  file_url : VARCHAR(500)
+  file_size : INTEGER
+  uploaded_at : TIMESTAMP
+}
+
+class bookmarks {
+  + id : UUID <<PK>>
+  --
+  user_id : UUID <<FK>>
+  material_id : UUID <<FK>>
+  created_at : TIMESTAMP
+  --
+  UNIQUE(user_id, material_id)
+}
+
+class users {
+  + id : UUID <<PK>>
+  --
+  name : VARCHAR(255)
+  role : ENUM
+}
+
+' Relationships
+courses "1" *-- "0..*" course_weeks : contains
+course_weeks "1" *-- "0..*" materials : has
+materials "1" -- "0..*" bookmarks : bookmarked by >
+users "1" -- "0..*" bookmarks : bookmarks >
+
+note bottom of bookmarks
+  Junction table for
+  student bookmarks
+end note
+
+@enduml

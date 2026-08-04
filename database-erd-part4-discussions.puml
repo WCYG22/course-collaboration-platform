@@ -1,0 +1,55 @@
+@startuml ERD_Part4_Discussions
+
+skinparam dpi 200
+skinparam defaultFontSize 11
+skinparam monochrome true
+skinparam shadowing false
+hide circle
+
+title CAML LMS Database - Part 4: Discussion Forum
+
+class courses {
+  + id : UUID <<PK>>
+  --
+  code : VARCHAR(20)
+  name : VARCHAR(255)
+}
+
+class users {
+  + id : UUID <<PK>>
+  --
+  name : VARCHAR(255)
+  role : ENUM
+}
+
+class discussion_posts {
+  + id : UUID <<PK>>
+  --
+  course_id : UUID <<FK>>
+  user_id : UUID <<FK>>
+  title : VARCHAR(255)
+  content : TEXT
+  created_at : TIMESTAMP
+}
+
+class discussion_replies {
+  + id : UUID <<PK>>
+  --
+  post_id : UUID <<FK>>
+  user_id : UUID <<FK>>
+  content : TEXT
+  created_at : TIMESTAMP
+}
+
+' Relationships
+courses "1" *-- "0..*" discussion_posts : has
+users "1" -- "0..*" discussion_posts : creates >
+discussion_posts "1" *-- "0..*" discussion_replies : has replies
+users "1" -- "0..*" discussion_replies : writes >
+
+note right of discussion_replies
+  Threaded discussion
+  with post-reply structure
+end note
+
+@enduml

@@ -1,0 +1,206 @@
+@startuml CAML_LMS_Database_ERD
+
+' High resolution settings
+skinparam dpi 300
+skinparam defaultFontSize 12
+skinparam defaultFontName Arial
+
+!define PK(x) <b><color:red>PK</color></b> x
+!define FK(x) <b><color:blue>FK</color></b> x
+
+skinparam classAttributeIconSize 0
+skinparam linetype ortho
+skinparam nodesep 100
+skinparam ranksep 80
+skinparam padding 5
+skinparam class {
+  BackgroundColor White
+  BorderColor Black
+  ArrowColor Black
+}
+
+left to right direction
+
+' Users Entity
+entity "users" as users {
+  PK(id) : UUID
+  <u>email</u> : VARCHAR(255)
+  password_hash : VARCHAR(255)
+  name : VARCHAR(255)
+  role : ENUM('student', 'instructor')
+  avatar : VARCHAR(500)
+  bio : TEXT
+  skills : JSON
+  preferred_mode : ENUM
+  availability : JSON
+  created_at : TIMESTAMP
+  updated_at : TIMESTAMP
+}
+
+' Sessions Entity
+entity "sessions" as sessions {
+  PK(id) : UUID
+  FK(user_id) : UUID
+  <u>token</u> : VARCHAR(500)
+  expires_at : TIMESTAMP
+  created_at : TIMESTAMP
+}
+
+' Notifications Entity
+entity "notifications" as notifications {
+  PK(id) : UUID
+  FK(user_id) : UUID
+  type : VARCHAR(50)
+  title : VARCHAR(255)
+  message : TEXT
+  is_read : BOOLEAN
+  created_at : TIMESTAMP
+}
+
+' Courses Entity
+entity "courses" as courses {
+  PK(id) : UUID
+  FK(instructor_id) : UUID
+  code : VARCHAR(20)
+  name : VARCHAR(255)
+  description : TEXT
+  status : ENUM('draft', 'published', 'archived')
+  created_at : TIMESTAMP
+  updated_at : TIMESTAMP
+}
+
+' Enrollments Entity (Junction Table)
+entity "enrollments" as enrollments {
+  PK(id) : UUID
+  FK(course_id) : UUID
+  FK(student_id) : UUID
+  enrolled_at : TIMESTAMP
+  progress : INTEGER
+  --
+  <i>UNIQUE(course_id, student_id)</i>
+}
+
+' Course Weeks Entity
+entity "course_weeks" as course_weeks {
+  PK(id) : UUID
+  FK(course_id) : UUID
+  week_number : INTEGER
+  title : VARCHAR(255)
+  description : TEXT
+  start_date : DATE
+  end_date : DATE
+}
+
+' Materials Entity
+entity "materials" as materials {
+  PK(id) : UUID
+  FK(week_id) : UUID
+  title : VARCHAR(255)
+  type : ENUM('lecture', 'reading', 'video', 'other')
+  file_url : VARCHAR(500)
+  file_size : INTEGER
+  uploaded_at : TIMESTAMP
+}
+
+' Bookmarks Entity (Junction Table)
+entity "bookmarks" as bookmarks {
+  PK(id) : UUID
+  FK(user_id) : UUID
+  FK(material_id) : UUID
+  created_at : TIMESTAMP
+  --
+  <i>UNIQUE(user_id, material_id)</i>
+}
+
+' Assignments Entity
+entity "assignments" as assignments {
+  PK(id) : UUID
+  FK(course_id) : UUID
+  title : VARCHAR(255)
+  description : TEXT
+  due_date : TIMESTAMP
+  total_marks : INTEGER
+  file_required : BOOLEAN
+  created_at : TIMESTAMP
+  updated_at : TIMESTAMP
+}
+
+' Submissions Entity
+entity "submissions" as submissions {
+  PK(id) : UUID
+  FK(assignment_id) : UUID
+  FK(student_id) : UUID
+  file_url : VARCHAR(500)
+  file_name : VARCHAR(255)
+  submitted_at : TIMESTAMP
+  grade : DECIMAL(5,2)
+  feedback : TEXT
+  version : INTEGER
+  status : ENUM('submitted', 'graded', 'late')
+  --
+  <i>UNIQUE(assignment_id, student_id, version)</i>
+}
+
+' Discussion Posts Entity
+entity "discussion_posts" as discussion_posts {
+  PK(id) : UUID
+  FK(course_id) : UUID
+  FK(user_id) : UUID
+  title : VARCHAR(255)
+  content : TEXT
+  created_at : TIMESTAMP
+}
+
+' Discussion Replies Entity
+entity "discussion_replies" as discussion_replies {
+  PK(id) : UUID
+  FK(post_id) : UUID
+  FK(user_id) : UUID
+  content : TEXT
+  created_at : TIMESTAMP
+}
+
+' Relationships
+
+' Users relationships (simplified labels)
+users ||--o{ sessions : ""
+users ||--o{ notifications : ""
+users ||--o{ courses : "instructs"
+users ||--o{ enrollments : ""
+users ||--o{ bookmarks : ""
+users ||--o{ submissions : ""
+users ||--o{ discussion_posts : ""
+users ||--o{ discussion_replies : ""
+
+' Courses relationships
+courses ||--o{ enrollments : ""
+courses ||--o{ course_weeks : ""
+courses ||--o{ assignments : ""
+courses ||--o{ discussion_posts : ""
+
+' Course Weeks relationships
+course_weeks ||--o{ materials : ""
+
+' Materials relationships
+materials ||--o{ bookmarks : ""
+
+' Assignments relationships
+assignments ||--o{ submissions : ""
+
+' Discussion Posts relationships
+discussion_posts ||--o{ discussion_replies : ""
+
+' Notes
+note right of users
+  Students & Instructors
+end note
+
+note bottom of enrollments
+  M:N Junction Table
+end note
+
+note bottom of bookmarks
+  M:N Junction Table
+end note
+
+@enduml

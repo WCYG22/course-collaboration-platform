@@ -1,0 +1,63 @@
+@startuml ERD_Part3_Assignments
+
+skinparam dpi 200
+skinparam defaultFontSize 11
+skinparam monochrome true
+skinparam shadowing false
+hide circle
+
+title CAML LMS Database - Part 3: Assignment System
+
+class courses {
+  + id : UUID <<PK>>
+  --
+  code : VARCHAR(20)
+  name : VARCHAR(255)
+}
+
+class assignments {
+  + id : UUID <<PK>>
+  --
+  course_id : UUID <<FK>>
+  title : VARCHAR(255)
+  description : TEXT
+  due_date : TIMESTAMP
+  total_marks : INTEGER
+  file_required : BOOLEAN
+  created_at : TIMESTAMP
+}
+
+class submissions {
+  + id : UUID <<PK>>
+  --
+  assignment_id : UUID <<FK>>
+  student_id : UUID <<FK>>
+  file_url : VARCHAR(500)
+  file_name : VARCHAR(255)
+  submitted_at : TIMESTAMP
+  grade : DECIMAL(5,2)
+  feedback : TEXT
+  version : INTEGER
+  status : ENUM('submitted', 'graded', 'late')
+  --
+  UNIQUE(assignment_id, student_id, version)
+}
+
+class users {
+  + id : UUID <<PK>>
+  --
+  name : VARCHAR(255)
+  role : ENUM
+}
+
+' Relationships
+courses "1" *-- "0..*" assignments : has
+assignments "1" *-- "0..*" submissions : receives
+users "1" -- "0..*" submissions : submits >
+
+note bottom of submissions
+  Supports version tracking
+  for resubmissions
+end note
+
+@enduml

@@ -1,0 +1,141 @@
+@startuml CAML_LMS_ERD_Compact
+
+skinparam dpi 200
+skinparam defaultFontSize 10
+skinparam monochrome true
+skinparam shadowing false
+skinparam nodesep 60
+skinparam ranksep 50
+skinparam padding 3
+
+' Compact notation
+hide circle
+hide methods
+
+class users {
+  + id : UUID
+  --
+  email : VARCHAR(255)
+  name : VARCHAR(255)
+  role : ENUM
+  skills : JSON
+  preferred_mode : ENUM
+  availability : JSON
+}
+
+class courses {
+  + id : UUID
+  --
+  instructor_id : UUID
+  code : VARCHAR(20)
+  name : VARCHAR(255)
+  status : ENUM
+}
+
+class enrollments {
+  + id : UUID
+  --
+  course_id : UUID
+  student_id : UUID
+  progress : INTEGER
+}
+
+class course_weeks {
+  + id : UUID
+  --
+  course_id : UUID
+  week_number : INT
+  title : VARCHAR(255)
+}
+
+class materials {
+  + id : UUID
+  --
+  week_id : UUID
+  title : VARCHAR(255)
+  type : ENUM
+  file_url : VARCHAR
+}
+
+class assignments {
+  + id : UUID
+  --
+  course_id : UUID
+  title : VARCHAR(255)
+  due_date : TIMESTAMP
+  total_marks : INTEGER
+}
+
+class submissions {
+  + id : UUID
+  --
+  assignment_id : UUID
+  student_id : UUID
+  file_url : VARCHAR
+  grade : DECIMAL
+  status : ENUM
+}
+
+class discussion_posts {
+  + id : UUID
+  --
+  course_id : UUID
+  user_id : UUID
+  title : VARCHAR(255)
+  content : TEXT
+}
+
+class discussion_replies {
+  + id : UUID
+  --
+  post_id : UUID
+  user_id : UUID
+  content : TEXT
+}
+
+class bookmarks {
+  + id : UUID
+  --
+  user_id : UUID
+  material_id : UUID
+}
+
+class sessions {
+  + id : UUID
+  --
+  user_id : UUID
+  token : VARCHAR
+  expires_at : TIMESTAMP
+}
+
+class notifications {
+  + id : UUID
+  --
+  user_id : UUID
+  title : VARCHAR(255)
+  is_read : BOOLEAN
+}
+
+' Relationships
+users "1" -- "0..*" courses : instructs
+users "1" -- "0..*" enrollments : enrolls
+users "1" -- "0..*" submissions : submits
+users "1" -- "0..*" discussion_posts : creates
+users "1" -- "0..*" discussion_replies : writes
+users "1" -- "0..*" bookmarks
+users "1" -- "0..*" sessions
+users "1" -- "0..*" notifications
+
+courses "1" -- "0..*" enrollments
+courses "1" -- "0..*" course_weeks
+courses "1" -- "0..*" assignments
+courses "1" -- "0..*" discussion_posts
+
+course_weeks "1" -- "0..*" materials
+materials "1" -- "0..*" bookmarks
+
+assignments "1" -- "0..*" submissions
+
+discussion_posts "1" -- "0..*" discussion_replies
+
+@enduml
